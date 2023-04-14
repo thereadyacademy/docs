@@ -39,6 +39,7 @@ First, install the SDK with `npm`.
 npm install --save express-oauth2-jwt-bearer
 ```
 
+
 ## Configure the middleware {{{ data-action=code data-code="server.js#1:10" }}}
 
 Configure `express-oauth2-jwt-bearer` with your Domain and API Identifier.
@@ -54,6 +55,21 @@ To protect an individual route by requiring a valid JWT, configure the route wit
 You can configure individual routes to look for a particular scope. To achieve that, set up another middleware with the `requiresScope` method. Provide the required scopes and apply the middleware to any routes you want to add authorization to.
 
 Pass the `checkJwt` and `requiredScopes` middlewares to the route you want to protect.
+
+## Update authorizationParams with additional scopes
+https://auth0.github.io/auth0-spa-js/interfaces/AuthorizationParams.html#scope
+
+By default, the only scopes that are processed during the authorization are `openid` `profile` and `email`. To add additional scopes to the access token, update the `options` that are passed to the auth0Client when the user logs in. 
+
+```
+const options = {
+      authorizationParams: {
+        scope: "openid profile email read:messages"
+      }
+    };
+    
+await auth0Client.loginWithRedirect(options);
+```
 
 In this configuration, only access tokens with the `read:messages` scope can access the endpoint.
 
